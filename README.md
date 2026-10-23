@@ -17,8 +17,8 @@ Requisito: nginx con el certificado autofirmado de la Fase 2 ya funcionando.
 
 ```bash
 sudo apt install -y git
-git clone https://github.com/USUARIO/proyecto-seguridad-web.git
-cd proyecto-seguridad-web
+git clone https://github.com/ivaniaHer/seguridad_web_proy.git
+cd seguridad_web_proy
 sudo bash instalar.sh                 # solo el sitio seguro
 sudo bash instalar.sh --laboratorio   # + páginas vulnerables para la Fase 4
 ```

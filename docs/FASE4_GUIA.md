@@ -9,7 +9,7 @@ laboratorio vulnerable (`/laboratorio/`) con el sitio seguro.
 ## 0. Preparación
 
 ```bash
-cd ~/proyecto-seguridad-web
+cd ~/seguridad_web_proy
 git pull
 sudo bash instalar.sh --laboratorio
 mkdir -p resultados
