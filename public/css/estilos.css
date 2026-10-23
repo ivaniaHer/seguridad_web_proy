@@ -1,0 +1,138 @@
+:root {
+  --fondo: #f3f5f9;
+  --tarjeta: #ffffff;
+  --texto: #1f2933;
+  --suave: #616e7c;
+  --borde: #d9e2ec;
+  --primario: #1e4e8c;
+  --primario-oscuro: #163a69;
+  --ok: #1f7a4d;
+  --ok-fondo: #e3f6ec;
+  --peligro: #b42318;
+  --peligro-fondo: #fdecea;
+  --aviso-fondo: #e8f0fb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.barra {
+  background: var(--primario);
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.marca { font-weight: 700; }
+.barra nav { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+.barra a { color: #fff; text-decoration: none; }
+.barra a:hover { text-decoration: underline; }
+
+main { flex: 1; width: 100%; max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+footer { text-align: center; color: var(--suave); font-size: 0.85rem; padding: 1rem; }
+
+.tarjeta {
+  background: var(--tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.angosta { max-width: 420px; margin-left: auto; margin-right: auto; }
+h1 { margin-top: 0; font-size: 1.5rem; }
+h2 { font-size: 1.15rem; }
+
+label { display: block; font-weight: 600; margin: 1rem 0 0.3rem; }
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  font-size: 1rem;
+}
+input:focus { outline: 2px solid var(--primario); outline-offset: 1px; }
+input.invalido { border-color: var(--peligro); }
+
+button {
+  margin-top: 1.25rem;
+  width: 100%;
+  padding: 0.7rem;
+  background: var(--primario);
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+button:hover { background: var(--primario-oscuro); }
+button:disabled { opacity: 0.6; cursor: wait; }
+.boton-secundario {
+  width: auto;
+  margin: 0;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.9rem;
+  background: transparent;
+  border: 1px solid currentColor;
+  color: inherit;
+}
+.tarjeta .boton-secundario { color: var(--primario); }
+.boton-secundario:hover { background: rgba(255, 255, 255, 0.15); }
+.en-linea { display: inline; margin: 0; }
+
+.mensaje-campo { display: block; min-height: 1.2em; color: var(--peligro); font-size: 0.85rem; }
+.error { background: var(--peligro-fondo); color: var(--peligro); padding: 0.75rem 1rem; border-radius: 6px; }
+.error ul { margin: 0; padding-left: 1.2rem; }
+.aviso { background: var(--aviso-fondo); color: var(--primario-oscuro); padding: 0.75rem 1rem; border-radius: 6px; }
+.secundario { color: var(--suave); text-align: center; margin-bottom: 0; }
+
+.requisitos { list-style: none; padding: 0; margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--suave); }
+.requisitos li::before { content: "○ "; }
+.requisitos li.cumple { color: var(--ok); }
+.requisitos li.cumple::before { content: "✔ "; }
+
+.datos { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; }
+.datos dt { font-weight: 600; color: var(--suave); }
+.datos dd { margin: 0; }
+
+.lista-check { padding-left: 0; list-style: none; }
+.lista-check li { padding: 0.25rem 0; }
+.lista-check li::before { content: "✔ "; color: var(--ok); }
+
+.etiqueta {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--aviso-fondo);
+  color: var(--primario-oscuro);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.etiqueta.ok, .evento-login_exitoso { background: var(--ok-fondo); color: var(--ok); }
+.etiqueta.peligro, .evento-login_fallido, .evento-cuenta_bloqueada, .evento-login_bloqueado,
+.evento-csrf_invalido, .evento-acceso_denegado { background: var(--peligro-fondo); color: var(--peligro); }
+
+.tabla-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { text-align: left; padding: 0.5rem; border-bottom: 1px solid var(--borde); white-space: nowrap; }
+th { background: var(--fondo); }
+code { background: var(--fondo); padding: 0.05rem 0.3rem; border-radius: 4px; }
+
+@media (max-width: 600px) {
+  main { margin: 1rem auto; }
+  .tarjeta { padding: 1rem; }
+  .datos { grid-template-columns: 1fr; }
+}
