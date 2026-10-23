@@ -82,9 +82,9 @@ instalar.sh     Instalador
 
 ## Guion sugerido para la exposición
 
-1. Mostrar `http://IP` → redirige a `https://IP` (Fases 1 y 2).
+1. Mostrar `http://localhost` → redirige a `https://localhost` (Fases 1 y 2).
 2. Registro con contraseña débil (rechazada) y luego robusta; mostrar el hash en la BD:
-   `sudo mysql fase3 -e "SELECT usuario, contrasena_hash FROM usuarios"`.
+   `sudo mariadb fase3 -e "SELECT usuario, contrasena_hash FROM usuarios"`.
 3. Login; en F12 → Cookies mostrar las banderas de `F3SESSID` y que el valor cambia al entrar.
 4. Usuario normal intenta `/admin.php` → 403. Admin sí entra y ve la auditoría.
 5. 5 intentos fallidos → bloqueo; el admin lo desbloquea.

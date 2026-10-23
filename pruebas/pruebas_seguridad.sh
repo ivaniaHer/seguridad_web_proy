@@ -114,8 +114,8 @@ COD=$(peticion "$J" POST registro.php "csrf=$T" "usuario=$USR" "contrasena=12345
 COD=$(peticion "$J" POST registro.php "csrf=$T" "usuario=$USR" "contrasena=$CLAVE" "confirmacion=$CLAVE")
 [[ "$COD" == "303" ]]; resultado $? "Contraseña robusta aceptada, usuario $USR creado ($COD)"
 
-if [[ $EUID -eq 0 ]] && command -v mysql >/dev/null; then
-    HASH=$(mysql -N fase3 -e "SELECT contrasena_hash FROM usuarios WHERE usuario = '$USR'")
+if [[ $EUID -eq 0 ]] && command -v mariadb >/dev/null; then
+    HASH=$(mariadb -N fase3 -e "SELECT contrasena_hash FROM usuarios WHERE usuario = '$USR'")
     echo "      hash guardado: $HASH"
     [[ "$HASH" == '$2y$12$'* ]]; resultado $? "Contraseña guardada como hash bcrypt costo 12"
 fi

@@ -4,7 +4,7 @@ Objetivo: escanear el sitio con **Nikto** y **OWASP ZAP**, probar a mano **inyec
 documentar hallazgos y soluciones. La idea para el informe y la exposición es **comparar** el
 laboratorio vulnerable (`/laboratorio/`) con el sitio seguro.
 
-> Todo se ejecuta dentro de la VM contra `https://localhost` o la IP de la VM. No escanees sitios ajenos.
+> Todo se ejecuta dentro de la VM contra `https://localhost` (el certificado de la Fase 2 es para `localhost` y `127.0.0.1`). No escanees sitios ajenos.
 
 ## 0. Preparación
 
@@ -100,10 +100,10 @@ usuario de BD con privilegios mínimos (sin DELETE/DROP), errores ocultos (`disp
 
 ### 4.3 CSRF
 
-1. Abre `https://IP/laboratorio/cambiar_correo.php` (sesión de "maria").
-2. Abre `pruebas/ataque_csrf.html` con doble clic en el mismo navegador, escribe la IP y pulsa
+1. Abre `https://localhost/laboratorio/cambiar_correo.php` (sesión de "maria").
+2. Abre `pruebas/ataque_csrf.html` con doble clic en el Firefox de la VM (deja la URL `https://localhost`) y pulsa
    *Reclamar premio*. El correo de maria cambia a `atacante@malicioso.com`. **Vulnerable.**
-3. Inicia sesión como admin en `https://IP/`, luego en la página atacante pulsa los botones del sitio seguro:
+3. Inicia sesión como admin en `https://localhost/`, luego en la página atacante pulsa los botones del sitio seguro:
    el servidor responde **403** o pide iniciar sesión, y la sesión sigue abierta. **Protegido.**
 4. En *Administración*, el registro de auditoría muestra el evento `CSRF_INVALIDO`.
 
@@ -135,5 +135,5 @@ usuario de BD con privilegios mínimos (sin DELETE/DROP), errores ocultos (`disp
 - Limitar intentos también por IP (`limit_req` de nginx o fail2ban leyendo la tabla de auditoría),
   para evitar que un atacante bloquee cuentas ajenas a propósito.
 - Firewall (`ufw allow 443/tcp`, cerrar puertos no usados) y actualizaciones automáticas (`unattended-upgrades`).
-- Copias de seguridad cifradas de la base de datos (`mysqldump` + `gpg`) y pruebas de restauración.
+- Copias de seguridad cifradas de la base de datos (`mariadb-dump` + `gpg`) y pruebas de restauración.
 - Enviar el registro de auditoría a un sistema central (syslog/SIEM) y alertar ante `CUENTA_BLOQUEADA` o `CSRF_INVALIDO`.

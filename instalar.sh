@@ -66,7 +66,7 @@ if [[ -f "$DESTINO/app/config.php" ]]; then
 fi
 [[ -n "$DB_PASS" ]] || DB_PASS=$(openssl rand -hex 24)
 
-mysql <<SQL
+mariadb <<SQL
 CREATE DATABASE IF NOT EXISTS \`$BD\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER IF NOT EXISTS '$BD_USUARIO'@'localhost' IDENTIFIED BY '$DB_PASS';
 ALTER USER '$BD_USUARIO'@'localhost' IDENTIFIED BY '$DB_PASS';
@@ -74,9 +74,9 @@ ALTER USER '$BD_USUARIO'@'localhost' IDENTIFIED BY '$DB_PASS';
 GRANT SELECT, INSERT, UPDATE ON \`$BD\`.* TO '$BD_USUARIO'@'localhost';
 FLUSH PRIVILEGES;
 SQL
-mysql "$BD" < "$ORIGEN/sql/esquema.sql"
+mariadb "$BD" < "$ORIGEN/sql/esquema.sql"
 if [[ $LABORATORIO -eq 1 ]]; then
-    mysql "$BD" < "$ORIGEN/sql/laboratorio.sql"
+    mariadb "$BD" < "$ORIGEN/sql/laboratorio.sql"
 fi
 ok "Base '$BD', usuario '$BD_USUARIO' (solo SELECT, INSERT, UPDATE)"
 
@@ -108,7 +108,7 @@ ok "Permisos: root:www-data, carpetas 750, archivos 640"
 
 # -----------------------------------------------------------------------------
 paso "5/7 Usuario administrador"
-ADMINS=$(mysql -N "$BD" -e "SELECT COUNT(*) FROM usuarios WHERE rol = 'admin'")
+ADMINS=$(mariadb -N "$BD" -e "SELECT COUNT(*) FROM usuarios WHERE rol = 'admin'")
 if [[ "$ADMINS" -eq 0 ]]; then
     read -rp "    Nombre del administrador [admin]: " ADMIN_USUARIO
     ADMIN_USUARIO=${ADMIN_USUARIO:-admin}
@@ -130,7 +130,7 @@ if [[ "$ADMINS" -eq 0 ]]; then
     # La contraseña viaja por variable de entorno, no como argumento visible en "ps".
     HASH=$(ADMIN_PASS="$P1" php -r 'echo password_hash(getenv("ADMIN_PASS"), PASSWORD_BCRYPT, ["cost" => 12]);')
     unset P1 P2
-    mysql "$BD" -e "INSERT INTO usuarios (usuario, contrasena_hash, rol) VALUES ('$ADMIN_USUARIO', '$HASH', 'admin')"
+    mariadb "$BD" -e "INSERT INTO usuarios (usuario, contrasena_hash, rol) VALUES ('$ADMIN_USUARIO', '$HASH', 'admin')"
     ok "Administrador '$ADMIN_USUARIO' creado (hash bcrypt)"
 else
     ok "Ya existe un administrador, se conserva"
@@ -141,8 +141,8 @@ paso "6/7 Configurando nginx"
 # Se intenta reutilizar el certificado de la Fase 2.
 CERT=$(grep -rhoP '^\s*ssl_certificate\s+\K[^;\s]+' /etc/nginx/sites-enabled/ /etc/nginx/conf.d/ /etc/nginx/snippets/ 2>/dev/null | grep -v '__CERT__' | head -n1 || true)
 KEY=$(grep -rhoP '^\s*ssl_certificate_key\s+\K[^;\s]+' /etc/nginx/sites-enabled/ /etc/nginx/conf.d/ /etc/nginx/snippets/ 2>/dev/null | grep -v '__KEY__' | head -n1 || true)
-CERT=${CERT:-/etc/ssl/certs/nginx-selfsigned.crt}
-KEY=${KEY:-/etc/ssl/private/nginx-selfsigned.key}
+CERT=${CERT:-/etc/nginx/ssl/nginx-selfsigned.crt}
+KEY=${KEY:-/etc/nginx/ssl/nginx-selfsigned.key}
 read -rp "    Certificado de la Fase 2 [$CERT]: " R; CERT=${R:-$CERT}
 read -rp "    Llave privada            [$KEY]: " R; KEY=${R:-$KEY}
 [[ -f "$CERT" ]] || falla "No existe $CERT"
@@ -179,7 +179,7 @@ COD_HTTPS=$(curl -sk -o /dev/null -w '%{http_code}' https://localhost/login.php 
 [[ "$COD_HTTP" == "301" ]] && ok "HTTP redirige a HTTPS (301)" || echo "    ! HTTP respondió $COD_HTTP"
 [[ "$COD_HTTPS" == "200" ]] && ok "Login disponible por HTTPS (200)" || echo "    ! HTTPS respondió $COD_HTTPS (revisa: sudo tail /var/log/nginx/error.log)"
 
-IP=$(hostname -I | awk '{print $1}')
-printf '\n\033[1mListo.\033[0m Abre en el navegador: https://%s/\n' "$IP"
-[[ $LABORATORIO -eq 1 ]] && printf 'Laboratorio (Fase 4): https://%s/laboratorio/\n' "$IP"
+printf '\n\033[1mListo.\033[0m Abre en el Firefox de la VM: https://localhost/\n'
+[[ $LABORATORIO -eq 1 ]] && echo "Laboratorio (Fase 4): https://localhost/laboratorio/"
+echo "(El certificado de la Fase 2 es para localhost y 127.0.0.1; desde otra IP el navegador avisará que el nombre no coincide.)"
 echo "Pruebas automáticas (Fase 4): bash pruebas/pruebas_seguridad.sh https://localhost"
