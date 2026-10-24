@@ -138,11 +138,15 @@ fi
 
 # -----------------------------------------------------------------------------
 paso "6/7 Configurando nginx"
-# Se intenta reutilizar el certificado de la Fase 2.
-CERT=$(grep -rhoP '^\s*ssl_certificate\s+\K[^;\s]+' /etc/nginx/sites-enabled/ /etc/nginx/conf.d/ /etc/nginx/snippets/ 2>/dev/null | grep -v '__CERT__' | head -n1 || true)
-KEY=$(grep -rhoP '^\s*ssl_certificate_key\s+\K[^;\s]+' /etc/nginx/sites-enabled/ /etc/nginx/conf.d/ /etc/nginx/snippets/ 2>/dev/null | grep -v '__KEY__' | head -n1 || true)
-CERT=${CERT:-/etc/nginx/ssl/nginx-selfsigned.crt}
-KEY=${KEY:-/etc/nginx/ssl/nginx-selfsigned.key}
+# Se reutiliza el certificado de la Fase 2. Si no está en la ruta de la práctica,
+# se busca en la configuración de nginx, descartando el "snakeoil" que trae Ubuntu
+# (CN = nombre de la máquina, no localhost).
+CERT=/etc/nginx/ssl/nginx-selfsigned.crt
+KEY=/etc/nginx/ssl/nginx-selfsigned.key
+if [[ ! -f "$CERT" || ! -f "$KEY" ]]; then
+    CERT=$(grep -rhoP '^\s*ssl_certificate\s+\K[^;\s]+' /etc/nginx/sites-enabled/ /etc/nginx/conf.d/ 2>/dev/null | grep -v -e '__CERT__' -e 'snakeoil' | head -n1 || true)
+    KEY=$(grep -rhoP '^\s*ssl_certificate_key\s+\K[^;\s]+' /etc/nginx/sites-enabled/ /etc/nginx/conf.d/ 2>/dev/null | grep -v -e '__KEY__' -e 'snakeoil' | head -n1 || true)
+fi
 read -rp "    Certificado de la Fase 2 [$CERT]: " R; CERT=${R:-$CERT}
 read -rp "    Llave privada            [$KEY]: " R; KEY=${R:-$KEY}
 [[ -f "$CERT" ]] || falla "No existe $CERT"
