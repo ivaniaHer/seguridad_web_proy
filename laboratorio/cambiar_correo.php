@@ -1,6 +1,6 @@
 <?php
 /*
- * ⚠ CÓDIGO INSEGURO A PROPÓSITO (Fase 4): CSRF.
+ * CÓDIGO INSEGURO A PROPÓSITO (Fase 4): CSRF.
  *  - El formulario no lleva token CSRF.
  *  - La cookie de sesión usa SameSite=None, así que el navegador la envía
  *    aunque la petición venga de otro sitio (pruebas/ataque_csrf.html).
@@ -35,7 +35,7 @@ $correo = (string) $st->fetchColumn();
     <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
-<header class="barra"><span class="marca">⚠ Laboratorio: CSRF</span><nav><a href="index.php">Laboratorio</a></nav></header>
+<header class="barra"><span class="marca">Laboratorio: CSRF</span><nav><a href="index.php">Laboratorio</a></nav></header>
 <main>
     <section class="tarjeta angosta">
         <h1>Perfil de <?= htmlspecialchars($_SESSION['lab_usuario']) ?></h1>

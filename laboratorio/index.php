@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
-<header class="barra"><span class="marca">⚠ Laboratorio vulnerable (solo demostración)</span><nav><a href="/">Sitio seguro</a></nav></header>
+<header class="barra"><span class="marca">Laboratorio vulnerable (solo demostración)</span><nav><a href="/">Sitio seguro</a></nav></header>
 <main>
     <section class="tarjeta">
         <h1>Laboratorio de vulnerabilidades</h1>

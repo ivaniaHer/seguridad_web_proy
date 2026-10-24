@@ -43,7 +43,7 @@ function encabezado(string $titulo): void
 </head>
 <body>
 <header class="barra">
-    <span class="marca">🔒 Portal Seguro</span>
+    <span class="marca">Portal Seguro</span>
     <?php if (hay_sesion()): ?>
         <nav>
             <a href="/panel.php">Panel</a>

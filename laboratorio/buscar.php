@@ -1,6 +1,6 @@
 <?php
 /*
- * ⚠ CÓDIGO INSEGURO A PROPÓSITO (Fase 4): XSS reflejado.
+ * CÓDIGO INSEGURO A PROPÓSITO (Fase 4): XSS reflejado.
  * Cookie de demostración SIN HttpOnly: JavaScript sí puede leerla.
  * La cookie real del sitio (F3SESSID) es HttpOnly y no aparece en document.cookie.
  */
@@ -16,7 +16,7 @@ $q = $_GET['q'] ?? '';
     <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
-<header class="barra"><span class="marca">⚠ Laboratorio: XSS reflejado</span><nav><a href="index.php">Laboratorio</a></nav></header>
+<header class="barra"><span class="marca">Laboratorio: XSS reflejado</span><nav><a href="index.php">Laboratorio</a></nav></header>
 <main>
     <section class="tarjeta">
         <h1>Buscador</h1>

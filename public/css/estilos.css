@@ -99,18 +99,15 @@ button:disabled { opacity: 0.6; cursor: wait; }
 .aviso { background: var(--aviso-fondo); color: var(--primario-oscuro); padding: 0.75rem 1rem; border-radius: 6px; }
 .secundario { color: var(--suave); text-align: center; margin-bottom: 0; }
 
-.requisitos { list-style: none; padding: 0; margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--suave); }
-.requisitos li::before { content: "○ "; }
-.requisitos li.cumple { color: var(--ok); }
-.requisitos li.cumple::before { content: "✔ "; }
+.requisitos { padding-left: 1.2rem; margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--suave); }
+.requisitos li.cumple { color: var(--ok); font-weight: 600; }
 
 .datos { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; }
 .datos dt { font-weight: 600; color: var(--suave); }
 .datos dd { margin: 0; }
 
-.lista-check { padding-left: 0; list-style: none; }
+.lista-check { padding-left: 1.2rem; }
 .lista-check li { padding: 0.25rem 0; }
-.lista-check li::before { content: "✔ "; color: var(--ok); }
 
 .etiqueta {
   display: inline-block;

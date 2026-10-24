@@ -25,8 +25,8 @@ for arg in "$@"; do
 done
 
 paso()  { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
-ok()    { printf '\033[1;32m    ✔ %s\033[0m\n' "$*"; }
-falla() { printf '\033[1;31m    ✘ %s\033[0m\n' "$*" >&2; exit 1; }
+ok()    { printf '\033[1;32m    [OK] %s\033[0m\n' "$*"; }
+falla() { printf '\033[1;31m    [ERROR] %s\033[0m\n' "$*" >&2; exit 1; }
 
 [[ $EUID -eq 0 ]] || falla "Ejecuta con sudo: sudo bash instalar.sh"
 command -v nginx >/dev/null || falla "nginx no está instalado (Fase 1)."

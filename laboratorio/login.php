@@ -1,6 +1,6 @@
 <?php
 /*
- * ⚠ CÓDIGO INSEGURO A PROPÓSITO (Fase 4): inyección SQL.
+ * CÓDIGO INSEGURO A PROPÓSITO (Fase 4): inyección SQL.
  * Compárese con public/login.php + app/autenticacion.php.
  */
 require __DIR__ . '/../../app/config.php';
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
-<header class="barra"><span class="marca">⚠ Laboratorio: inyección SQL</span><nav><a href="index.php">Laboratorio</a></nav></header>
+<header class="barra"><span class="marca">Laboratorio: inyección SQL</span><nav><a href="index.php">Laboratorio</a></nav></header>
 <main>
     <section class="tarjeta angosta">
         <h1>Login vulnerable</h1>
