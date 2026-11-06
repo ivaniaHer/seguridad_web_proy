@@ -28,14 +28,32 @@ $eventos = db()->query(
     'SELECT fecha, evento, usuario, ip, detalle FROM auditoria ORDER BY id DESC LIMIT 50'
 )->fetchAll();
 
+// Resumen para las tarjetas de arriba (se calcula con los datos ya consultados).
+$totalUsuarios = count($usuarios);
+$totalBloqueados = count(array_filter($usuarios, function ($x) { return (int) $x['bloqueado']; }));
+$totalActivos = count(array_filter($usuarios, function ($x) { return (int) $x['activo'] && !(int) $x['bloqueado']; }));
+$totalFallidos = count(array_filter($eventos, function ($ev) { return $ev['evento'] === 'LOGIN_FALLIDO'; }));
+
 $aviso = tomar_aviso();
 encabezado('Administración');
 ?>
-<section class="tarjeta">
-    <h1>Administración</h1>
-    <p>Solo los usuarios con rol <span class="etiqueta">admin</span> pueden ver esta página.</p>
-    <?php if ($aviso): ?><p class="aviso"><?= e($aviso) ?></p><?php endif; ?>
+<div class="saludo">
+    <div>
+        <h1>Administración</h1>
+        <p>Cuentas de usuario y registro de actividad. Visible solo para el rol <span class="etiqueta">admin</span>.</p>
+    </div>
+</div>
 
+<?php if ($aviso): ?><p class="aviso" role="status"><?= e($aviso) ?></p><?php endif; ?>
+
+<div class="metricas">
+    <div class="metrica"><span>Usuarios</span><strong><?= (int) $totalUsuarios ?></strong><small>Cuentas registradas</small></div>
+    <div class="metrica"><span>Activos</span><strong><?= (int) $totalActivos ?></strong><small>Pueden iniciar sesión</small></div>
+    <div class="metrica"><span>Bloqueados</span><strong><?= (int) $totalBloqueados ?></strong><small>Por intentos fallidos</small></div>
+    <div class="metrica"><span>Inicios fallidos</span><strong><?= (int) $totalFallidos ?></strong><small>En los últimos 50 eventos</small></div>
+</div>
+
+<section class="tarjeta">
     <h2>Usuarios</h2>
     <div class="tabla-scroll">
         <table>
